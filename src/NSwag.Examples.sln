@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29728.190
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NSwag.Examples", "NSwag.Examples\NSwag.Examples.csproj", "{C347D5E9-4878-49FE-9638-4766018EB786}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{C347D5E9-4878-49FE-9638-4766018EB786}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C347D5E9-4878-49FE-9638-4766018EB786}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C347D5E9-4878-49FE-9638-4766018EB786}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C347D5E9-4878-49FE-9638-4766018EB786}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {80238C1A-F5C3-47B8-8DE8-CC18EDA0ABF8}
+	EndGlobalSection
+EndGlobal
