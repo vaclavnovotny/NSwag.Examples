@@ -5,10 +5,14 @@ on:
     branches: [ main ]
   pull_request:
     branches: [ main ]
-
+    
+defaults:
+  run:
+    working-directory: src
+    
 jobs:
   build:
-
+    
     runs-on: ubuntu-latest
 
     steps:
