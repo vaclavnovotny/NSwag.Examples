@@ -5,7 +5,7 @@ This library allows you to programmatically define swagger examples in your NSWa
 ## Install package
 
 ```csharp
-Install-Package NSwag.Examples -Version 0.0.2
+Install-Package NSwag.Examples
 ```
 
 ## Setup Startup.cs
