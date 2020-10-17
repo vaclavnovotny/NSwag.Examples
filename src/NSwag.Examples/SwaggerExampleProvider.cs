@@ -15,7 +15,7 @@ namespace NSwag.Examples
 
         internal object GetProviderValue(Type valueType)
         {
-            if (!_mapper.TryGetProviderType(valueType, out var providerType))
+            if (valueType == null || !_mapper.TryGetProviderType(valueType, out var providerType))
                 return null;
 
             var providerService = _serviceProvider.GetService(providerType);
