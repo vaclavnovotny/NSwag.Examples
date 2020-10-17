@@ -102,5 +102,5 @@ Result in swagger:
 # Support
 I personally use this NuGet in my projects, so I will keep this repository up-to-date. Any ideas for extending functionalities are welcome, so create an issue with proposal. 
 
-### Did I save your some hours?
+### Did I save you some hours?
 [![ko-fi](https://www.ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/U7U72G1A2)
