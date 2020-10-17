@@ -1,4 +1,4 @@
-![Build](https://github.com/vaclavnovotny/NSwag.Examples/workflows/.NET%20Core/badge.svg?branch=main) ![Nuget](https://img.shields.io/nuget/v/NSwag.Examples?color=blue)
+![Build and Publish](https://github.com/vaclavnovotny/NSwag.Examples/workflows/Build%20and%20Publish/badge.svg) ![Nuget](https://img.shields.io/nuget/v/NSwag.Examples?color=blue)
 # Response and Request Body Examples for NSwag
 This library allows you to programmatically define swagger examples in your NSWag application. Example discovery occurs at start of application and uses reflection. 
 
