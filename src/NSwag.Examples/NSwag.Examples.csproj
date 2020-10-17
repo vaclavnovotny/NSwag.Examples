@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <version>0.0.1</version>
+    <Version>0.0.1</Version>
     <Authors>Vaclav Novotny</Authors>
     <RepositoryUrl>https://github.com/vaclavnovotny/NSwag.Examples</RepositoryUrl>
     <PackageId>NSwag.Examples</PackageId>
