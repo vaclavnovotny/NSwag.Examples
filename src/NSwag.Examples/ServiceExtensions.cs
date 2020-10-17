@@ -18,7 +18,7 @@ namespace NSwag.Examples
             var typeMapper = new SwaggerExampleTypeMapper();
             foreach (var assembly in assemblies)
             {
-                foreach (var providerType in assembly.GetTypes().Where(x=>x.GetInterfaces().Any(i => i.IsGenericType && i.GetGenericTypeDefinition() == typeof(IExampleProvider<>))))
+                foreach (var providerType in assembly.GetTypes().Where(x => x.GetInterfaces().Any(i => i.IsGenericType && i.GetGenericTypeDefinition() == typeof(IExampleProvider<>))))
                 {
                     var valueType = providerType.GetTypeInfo()
                         .ImplementedInterfaces
