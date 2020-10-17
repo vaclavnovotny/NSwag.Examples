@@ -2,12 +2,14 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <Version>1.0.0</Version>
+    <Version>1.0.1</Version>
     <Authors>Vaclav Novotny</Authors>
-    <PackageProjectUrl>https://github.com/vaclavnovotny/NSwag.Examples</PackageProjectUrl>
     <RepositoryUrl>https://github.com/vaclavnovotny/NSwag.Examples</RepositoryUrl>
+    <PackageProjectUrl>https://github.com/vaclavnovotny/NSwag.Examples</PackageProjectUrl>
+    <PackageTabs>NSwag;Examples;Swagger;OpenAPI</PackageTabs>
     <PackageId>NSwag.Examples</PackageId>
     <PackageDescription>Define strongly-typed examples for your NSwag based API.</PackageDescription>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
   </PropertyGroup>
 
   <ItemGroup>
