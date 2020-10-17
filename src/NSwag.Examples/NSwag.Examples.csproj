@@ -4,7 +4,7 @@
     <TargetFramework>netstandard2.0</TargetFramework>
     <Version>1.0.0</Version>
     <Authors>Vaclav Novotny</Authors>
-    <ProjectUrl>https://github.com/vaclavnovotny/NSwag.Examples</ProjectUrl>
+    <PackageProjectUrl>https://github.com/vaclavnovotny/NSwag.Examples</PackageProjectUrl>
     <RepositoryUrl>https://github.com/vaclavnovotny/NSwag.Examples</RepositoryUrl>
     <PackageId>NSwag.Examples</PackageId>
     <PackageDescription>Define strongly-typed examples for your NSwag based API.</PackageDescription>
