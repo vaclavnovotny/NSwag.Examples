@@ -80,7 +80,8 @@ public async Task<IActionResult> CreatePerson([FromBody, BindRequired] Person pe
     return Ok();
 }
 ```
-
+Result in swagger:
+![Image of request body](https://github.com/vaclavnovotny/images/blob/main/requestExample.JPG)
 
 ## Response Body
 
@@ -93,3 +94,6 @@ public async Task<IActionResult> GetPerson([FromRoute]int id)
     return Ok(new Person());
 }
 ```
+
+Result in swagger:
+![Image of request body](https://github.com/vaclavnovotny/images/blob/main/responseExampleSingle.JPG)
