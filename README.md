@@ -50,7 +50,7 @@ public class CityExample : IExampleProvider<City>
 
 You can also use dependency injection in constructor of your example provider class.
 
-Constructor and `GetExample` method gets called when operation processors are executed hence when swagger specification is being generated (which is during first request on swagger).
+Constructor and `GetExample` method gets called when operation processors are executed - when swagger specification is being generated which is during first request on swagger.
 ```csharp
 public class PersonExample : IExampleProvider<Person>
 {
