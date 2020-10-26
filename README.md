@@ -10,21 +10,24 @@ Install-Package NSwag.Examples
 
 ## Setup Startup.cs
 
+Add services needed for example definition using `AddExampleProviders()` and provide assemblies where are your examples located.
 ```csharp
-// Call this method and provide assemblies where your examples are located
-services.AddExampleProviders(typeof(CityExample).Assembly);
-
-// Use AddOpenApiDocument!
-services.AddOpenApiDocument((settings, provider) =>
+public void ConfigureServices(IServiceCollection services)
 {
-    settings.AddExamples(provider);
-});
+    services.AddControllers();
+
+    services.AddExampleProviders(typeof(CityExample).Assembly);
+    services.AddOpenApiDocument((settings, provider) =>
+    {
+        settings.AddExamples(provider);
+    });
+}
 ```
 
 ## Define examples for your types
 
+Create class and implement interface IExampleProvider<T> where T is the type you want to define example for.
 ```csharp
-// Implement interface IExampleProvider<T> where T is the type you want to define.
 public class CityExample : IExampleProvider<City>
 {
     public City GetExample()
@@ -46,6 +49,8 @@ public class CityExample : IExampleProvider<City>
 ## Use dependency injection
 
 You can also use dependency injection in constructor of your example provider class.
+
+Constructor and `GetExample` method gets called when operation processors are executed - when swagger specification is being generated which is during first request on swagger.
 ```csharp
 public class PersonExample : IExampleProvider<Person>
 {
