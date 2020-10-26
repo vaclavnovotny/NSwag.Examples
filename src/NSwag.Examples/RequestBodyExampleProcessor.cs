@@ -3,6 +3,7 @@ using System.Linq;
 using System.Reflection;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using NSwag.Generation.Processors;
 using NSwag.Generation.Processors.Contexts;
 
@@ -19,6 +20,7 @@ namespace NSwag.Examples
 
         public bool Process(OperationProcessorContext context)
         {
+            var logger = _serviceProvider.GetRequiredService<ILogger<RequestBodyExampleProcessor>>();
             var exampleProvider = _serviceProvider.GetRequiredService<SwaggerExampleProvider>();
             foreach (var apiParameter in context.OperationDescription.Operation.Parameters.Where(x => x.Kind == OpenApiParameterKind.Body))
             {
@@ -28,8 +30,13 @@ namespace NSwag.Examples
 
             foreach (var response in context.OperationDescription.Operation.Responses.Where(x => x.Key == "200"))
             {
-                var contextMethodInfo = context.MethodInfo.GetCustomAttribute<ProducesResponseTypeAttribute>();
-                response.Value.Examples = exampleProvider.GetProviderValue(contextMethodInfo?.Type);
+                var okAttributes = context.MethodInfo
+                    .GetCustomAttributes<ProducesResponseTypeAttribute>(true)
+                    .Where(x => x.StatusCode == 200)
+                    .ToList();
+                if (okAttributes.Count > 1)
+                    logger.LogWarning($"Multiple {nameof(ProducesResponseTypeAttribute)} defined for method {context.MethodInfo.Name}, selecting first.");
+                response.Value.Examples = exampleProvider.GetProviderValue(okAttributes.FirstOrDefault()?.Type);
             }
 
             return true;
