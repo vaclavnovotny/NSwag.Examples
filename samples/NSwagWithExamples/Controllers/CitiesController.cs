@@ -6,6 +6,7 @@ using NSwagWithExamples.Models;
 
 namespace NSwagWithExamples.Controllers
 {
+    [ProducesResponseType(StatusCodes.Status500InternalServerError, Type = typeof(CustomInternalError))]
     [ApiController, Route("api/v1/cities")]
     public class CitiesController : ControllerBase
     {

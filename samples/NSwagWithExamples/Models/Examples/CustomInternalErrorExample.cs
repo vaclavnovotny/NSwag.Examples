@@ -6,7 +6,7 @@ namespace NSwagWithExamples.Models.Examples
     {
         public CustomInternalError GetExample()
         {
-            return new CustomInternalError() { Reason = "Very serious problem occurred!", Severity = 100 };
+            return new CustomInternalError() { Reason = "Very serious problem occurred", Severity = 100 };
         }
     }
 }
