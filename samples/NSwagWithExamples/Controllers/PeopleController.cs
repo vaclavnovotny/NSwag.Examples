@@ -8,6 +8,7 @@ using NSwagWithExamples.Models;
 namespace NSwagWithExamples.Controllers
 {
     [ApiController, Route("api/v1/people")]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError, Type = typeof(CustomInternalError))]
     public class PeopleController : ControllerBase
     {
         [HttpGet]
