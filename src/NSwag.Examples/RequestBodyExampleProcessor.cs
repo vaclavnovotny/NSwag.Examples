@@ -28,15 +28,15 @@ namespace NSwag.Examples
                 apiParameter.ActualSchema.Example = exampleProvider.GetProviderValue(parameter.Key.ParameterType);
             }
 
-            foreach (var response in context.OperationDescription.Operation.Responses.Where(x => x.Key == "200"))
+            foreach (var response in context.OperationDescription.Operation.Responses)
             {
-                var okAttributes = context.MethodInfo
+                var attributesWithSameKey = context.MethodInfo
                     .GetCustomAttributes<ProducesResponseTypeAttribute>(true)
-                    .Where(x => x.StatusCode == 200)
+                    .Where(x => x.StatusCode.ToString() == response.Key)
                     .ToList();
-                if (okAttributes.Count > 1)
+                if (attributesWithSameKey.Count > 1)
                     logger.LogWarning($"Multiple {nameof(ProducesResponseTypeAttribute)} defined for method {context.MethodInfo.Name}, selecting first.");
-                response.Value.Examples = exampleProvider.GetProviderValue(okAttributes.FirstOrDefault()?.Type);
+                response.Value.Examples = exampleProvider.GetProviderValue(attributesWithSameKey.FirstOrDefault()?.Type);
             }
 
             return true;
