@@ -30,7 +30,7 @@ namespace NSwag.Examples
             foreach (var apiParameter in context.OperationDescription.Operation.Parameters.Where(x => x.Kind == OpenApiParameterKind.Body))
             {
                 var parameter = context.Parameters.SingleOrDefault(x => x.Value.Name == apiParameter.Name);
-                apiParameter.ActualSchema.Example = new OpenApiExample {Value = GetJObject(exampleProvider.GetProviderValue(parameter.Key.ParameterType), serializer)};
+                apiParameter.ActualSchema.Example = GetJObject(exampleProvider.GetProviderValue(parameter.Key.ParameterType), serializer);
             }
 
             foreach (var response in context.OperationDescription.Operation.Responses)
@@ -51,7 +51,7 @@ namespace NSwag.Examples
                 if (attributesWithSameKey.Count > 1)
                     logger.LogWarning($"Multiple {nameof(ProducesResponseTypeAttribute)} defined for method {context.MethodInfo.Name}, selecting first.");
                 
-                response.Value.Examples = new List<OpenApiExample> {new OpenApiExample {Value = GetJObject(exampleProvider.GetProviderValue(attributesWithSameKey.FirstOrDefault()?.Type), serializer)}};
+                response.Value.Examples = GetJObject(exampleProvider.GetProviderValue(attributesWithSameKey.FirstOrDefault()?.Type), serializer);
             }
 
             return true;

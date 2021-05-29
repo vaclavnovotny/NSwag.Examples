@@ -23,5 +23,11 @@ namespace NSwagWithExamples.Controllers
         {
             return Ok(new City());
         }
+
+        [HttpDelete("{id}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public async Task<IActionResult> DeleteCity([FromRoute] int id) {
+            return Ok();
+        }
     }
 }
