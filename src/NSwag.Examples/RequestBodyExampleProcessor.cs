@@ -57,12 +57,7 @@ namespace NSwag.Examples
             return true;
         }
 
-        private static object GetJObject(object value, JsonSerializer serializer) {
-            if (value == null)
-                return null;
-
-            return value is IEnumerable ? (object) JArray.FromObject(value, serializer) : JObject.FromObject(value, serializer);
-        }
+        private static object GetJObject(object value, JsonSerializer serializer) => value == null ? null : JToken.FromObject(value, serializer);
 
         private List<ProducesResponseTypeAttribute> GetAttributesWithSameStatusCode(MemberInfo memberInfo, int responseStatusCode)
         {

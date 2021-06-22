@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -24,6 +25,23 @@ namespace NSwagWithExamples.Controllers
         public async Task<IActionResult> GetPerson([FromRoute]int id)
         {
             return Ok(new Person());
+        }
+
+        [HttpGet("{id}/age")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(int))]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError, Type = typeof(CustomInternalErrorOnMethodLevel))]
+        public async Task<IActionResult> GetPersonAge([FromRoute] int id)
+        {
+            return Ok(50);
+        }
+
+
+        [HttpGet("{id}/birth")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(DateTime))]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError, Type = typeof(CustomInternalErrorOnMethodLevel))]
+        public async Task<IActionResult> GetPersonBirth([FromRoute] int id)
+        {
+            return Ok(DateTime.UtcNow);
         }
 
         [HttpPost]
