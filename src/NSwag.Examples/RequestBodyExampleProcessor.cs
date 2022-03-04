@@ -27,7 +27,9 @@ namespace NSwag.Examples
             var serializer = JsonSerializer.Create(context.Settings.SerializerSettings);
             var logger = _serviceProvider.GetRequiredService<ILogger<RequestBodyExampleProcessor>>();
             var exampleProvider = _serviceProvider.GetRequiredService<SwaggerExampleProvider>();
-            foreach (var apiParameter in context.OperationDescription.Operation.Parameters.Where(x => x.Kind == OpenApiParameterKind.Body))
+            var apiParameters = context.OperationDescription.Operation.Parameters.Where(x => x.Kind == OpenApiParameterKind.Body && !x.IsBinaryBodyParameter);
+
+            foreach (var apiParameter in apiParameters)
             {
                 var parameter = context.Parameters.SingleOrDefault(x => x.Value.Name == apiParameter.Name);
                 apiParameter.ActualSchema.Example = GetJObject(exampleProvider.GetProviderValue(parameter.Key.ParameterType), serializer);
