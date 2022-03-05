@@ -10,6 +10,7 @@
     <PackageId>NSwag.Examples</PackageId>
     <PackageDescription>Define strongly-typed examples for your NSwag based API.</PackageDescription>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <IsPackable>true</IsPackable>
   </PropertyGroup>
 
   <ItemGroup>
