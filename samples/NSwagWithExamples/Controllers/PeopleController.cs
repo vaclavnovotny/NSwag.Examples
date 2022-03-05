@@ -50,5 +50,10 @@ namespace NSwagWithExamples.Controllers
             // create person logic
             return Ok();
         }
+
+        [HttpPost("from-file")]
+        public async Task<IActionResult> CreatePersonFromFile([FromForm] IFormFile file) {
+            return Ok();
+        }
     }
 }
