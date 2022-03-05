@@ -28,6 +28,6 @@ jobs:
     - name: Test
       run: dotnet test --no-restore --verbosity normal
     - name: Pack
-      run: dotnet pack src\\NSwag.Examples\\NSwag.Examples.csproj -c Release
+      run: dotnet pack -c Release
     - name: Publish package to NuGet
       run: dotnet nuget push *.nupkg --api-key ${{secrets.NUGET_API_KEY}} --source "https://api.nuget.org/v3/index.json" --skip-duplicate
