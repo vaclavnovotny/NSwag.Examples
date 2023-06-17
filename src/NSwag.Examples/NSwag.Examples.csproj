@@ -1,8 +1,8 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>netstandard2.0;net5.0;net6.0</TargetFrameworks>
-    <Version>1.0.7</Version>
+    <TargetFrameworks>netstandard2.0;net5.0;net6.0;net7.0</TargetFrameworks>
+    <Version>1.0.8</Version>
     <Authors>Vaclav Novotny</Authors>
     <RepositoryUrl>https://github.com/vaclavnovotny/NSwag.Examples</RepositoryUrl>
     <PackageProjectUrl>https://github.com/vaclavnovotny/NSwag.Examples</PackageProjectUrl>
