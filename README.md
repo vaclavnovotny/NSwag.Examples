@@ -1,6 +1,21 @@
 ![Build and Publish](https://github.com/vaclavnovotny/NSwag.Examples/workflows/Build%20and%20Publish/badge.svg) ![Nuget](https://img.shields.io/nuget/v/NSwag.Examples?color=blue)
-# Response and Request Body Examples for NSwag
+# Response and Request Body Examples for NSwag<!-- omit from toc -->
 This library allows you to programmatically define swagger examples in your NSWag application. Example discovery occurs at start of application and uses reflection. 
+
+### Overview:<!-- omit from toc -->
+- [Setup](#setup)
+  - [Install package](#install-package)
+  - [Setup Startup.cs](#setup-startupcs)
+- [Define examples for your types](#define-examples-for-your-types)
+  - [Request Body Parameters](#request-body-parameters)
+  - [Response Body](#response-body)
+- [Use dependency injection](#use-dependency-injection)
+- [Multiple examples](#multiple-examples)
+- [Naming the examples](#naming-the-examples)
+- [Set example for specific endpoint](#set-example-for-specific-endpoint)
+- [Support](#support)
+    - [Did I save you some hours?](#did-i-save-you-some-hours)
+
 
 # Setup
 
