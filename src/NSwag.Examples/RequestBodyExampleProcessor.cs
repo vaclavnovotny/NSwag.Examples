@@ -37,7 +37,8 @@ public class RequestBodyExampleProcessor : IOperationProcessor
             if (!context.OperationDescription.Operation.RequestBody.Content.TryGetValue(MediaTypeName, out var mediaType))
                 continue;
 
-            SetExamples(exampleProvider, parameter.Key.ParameterType, mediaType);
+            var endpointSpecificExampleAttribute = context.MethodInfo.GetCustomAttribute<EndpointSpecificExampleAttribute?>();
+            SetExamples(GetExamples(exampleProvider, parameter.Key.ParameterType, endpointSpecificExampleAttribute?.ExampleType), mediaType);
         }
     }
 
@@ -51,22 +52,22 @@ public class RequestBodyExampleProcessor : IOperationProcessor
 
             var attributesWithSameKey = GetAttributesWithSameStatusCode(context.MethodInfo, responseStatusCode);
 
+            //get attributes from controller, in case when no attribute on action was found
             if (!attributesWithSameKey.Any())
-                //get attributes from controller, in case when no attribute on action was found
                 attributesWithSameKey = GetAttributesWithSameStatusCode(context.MethodInfo.DeclaringType, responseStatusCode);
 
             if (attributesWithSameKey.Count > 1)
                 _logger.LogWarning($"Multiple {nameof(ProducesResponseTypeAttribute)} defined for method {context.MethodInfo.Name}, selecting first.");
+            else if (attributesWithSameKey.Count == 0)
+                continue;
 
+            var endpointSpecificExampleAttribute = context.MethodInfo.GetCustomAttribute<EndpointSpecificExampleAttribute?>();
             var valueType = attributesWithSameKey.FirstOrDefault()?.Type;
-            SetExamples(exampleProvider, valueType, mediaType);
+            SetExamples(GetExamples(exampleProvider, valueType, endpointSpecificExampleAttribute?.ExampleType), mediaType);
         }
     }
 
-    private void SetExamples(SwaggerExampleProvider exampleProvider, Type? valueType, OpenApiMediaType mediaType) {
-        var providerValues = exampleProvider.GetProviderValues(valueType);
-        var openApiExamples = _examplesConverter.ToOpenApiExamplesDictionary(providerValues.Select((x, i) => new KeyValuePair<string, object>(x.Key ?? $"Example {i + 1}", x.Value)));
-
+    private static void SetExamples(IDictionary<string, OpenApiExample> openApiExamples, OpenApiMediaType mediaType) {
         switch (openApiExamples) {
             case { Count: > 1 }:
             {
@@ -79,6 +80,12 @@ public class RequestBodyExampleProcessor : IOperationProcessor
                 mediaType.Example = openApiExamples.Single().Value.Value;
                 break;
         }
+    }
+
+    private IDictionary<string, OpenApiExample> GetExamples(SwaggerExampleProvider exampleProvider, Type? valueType, Type? exampleType) {
+        var providerValues = exampleProvider.GetProviderValues(valueType, exampleType);
+        var openApiExamples = _examplesConverter.ToOpenApiExamplesDictionary(providerValues.Select((x, i) => new KeyValuePair<string, object>(x.Key ?? $"Example {i + 1}", x.Value)));
+        return openApiExamples;
     }
 
     private static List<ProducesResponseTypeAttribute> GetAttributesWithSameStatusCode(MemberInfo memberInfo, int responseStatusCode) {

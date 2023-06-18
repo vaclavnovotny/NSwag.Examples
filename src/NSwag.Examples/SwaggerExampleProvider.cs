@@ -16,11 +16,11 @@ internal class SwaggerExampleProvider
         _serviceProvider = serviceProvider;
     }
 
-    internal IEnumerable<KeyValuePair<string?, object>> GetProviderValues(Type? valueType) {
+    internal IEnumerable<KeyValuePair<string?, object>> GetProviderValues(Type? valueType, Type? exampleType) {
         if (valueType == null)
             yield break;
 
-        var providerTypes = _mapper.GetProviderTypes(valueType);
+        var providerTypes = exampleType is not null ? new[] { exampleType } : _mapper.GetProviderTypes(valueType);
         foreach (var providerType in providerTypes) {
             var providerServices = _serviceProvider.GetServices(providerType);
             var exampleAnnotationAttribute = providerType.GetCustomAttribute<ExampleAnnotationAttribute>();
