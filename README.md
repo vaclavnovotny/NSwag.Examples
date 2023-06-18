@@ -13,8 +13,8 @@ This library allows you to programmatically define swagger examples in your NSWa
 - [Multiple examples](#multiple-examples)
 - [Naming the examples](#naming-the-examples)
 - [Set example for specific endpoint](#set-example-for-specific-endpoint)
+- [Polymorphism](#polymorphism)
 - [Support](#support)
-    - [Did I save you some hours?](#did-i-save-you-some-hours)
 
 
 # Setup
@@ -196,13 +196,61 @@ To set specific example, simply annotate controllers method with `EndpointSpecif
 [HttpGet("{id}/age")]
 [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(int))]
 [EndpointSpecificExample(typeof(PersonSpecificAgeExample))]
-public IActionResult GetPersonAge([FromRoute] int id) {
-    ...
+public IActionResult GetPersonAge([FromRoute] int id) {...}
+```
+
+# Polymorphism
+To define specific examples of abstract classes that are returned or received in controller, simply implement `IExampleProvider<T>` where `T` is the type of abstract class. 
+In example below, we have abstract class `Animal` which is returned as collection from `GetAnimals` endpoint. To specify examples for each implementation of `Animal` type, we create classes that implement `IExampleProvider<Animal>`.
+```csharp
+[HttpGet]
+[ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<Animal>))]
+public IActionResult GetAnimals() {...}
+
+public abstract class Animal {...}
+
+public class Monkey : Animal
+{
+    public int PoopsThrown { get; set; }
+}
+
+public class Sloth : Animal
+{
+    public uint YawnsCount { get; set; }
+}
+
+[ExampleAnnotation(Name = "Monkey")]
+public class MonkeyExample : IExampleProvider<Animal>
+{
+    public Animal GetExample() => new Monkey { Age = 5, Name = "Harambe", PawnCount = 4, PoopsThrown = 18 };
+}
+
+[ExampleAnnotation(Name = "Sloth")]
+public class SlothExample : IExampleProvider<Animal>
+{
+    public Animal GetExample() => new Sloth { Age = 18, Name = "Vence", PawnCount = 4, YawnsCount = 158 };
 }
 ```
+Swagger then show all examples in case of enumerable in response body:
+![Polymorphism in response body](https://github.com/vaclavnovotny/images/blob/main/polymorphism.jpg)
+
+Or in case of request body, Swagger shows dropdown of all defined examples:
+![Polymorphism in request body](https://github.com/vaclavnovotny/images/blob/main/polymorphism2.jpg)
+
+_Note:_ Set your JsonSerializer settings [TypeNameHandling](https://www.newtonsoft.com/json/help/html/serializetypenamehandling.htm) to see discriminator. For example:
+
+```csharp
+services.AddOpenApiDocument(
+    (settings, provider) =>
+    {
+        settings.SerializerSettings = new JsonSerializerSettings() { TypeNameHandling = TypeNameHandling.Auto };
+        settings.AddExamples(provider);
+    });
+```
+
 
 # Support
 I personally use this NuGet in my projects, so I will keep this repository up-to-date. Any ideas for extending functionalities are welcome, so create an issue with proposal. 
 
-### Did I save you some hours?
+### Did I save you some hours?<!-- omit from toc -->
 [![ko-fi](https://www.ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/U7U72G1A2)
