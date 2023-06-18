@@ -1,25 +1,23 @@
 using System.Collections.Generic;
 using NSwag.Examples;
 
-namespace NSwagWithExamples.Models.Examples
+namespace NSwagWithExamples.Models.Examples;
+
+public class PeopleExample : IExampleProvider<List<Person>>
 {
-    public class PeopleExample : IExampleProvider<List<Person>>
+    private readonly PersonExample _personExample;
+
+    public PeopleExample(PersonExample personExample)
     {
-        private readonly PersonExample _personExample;
+        _personExample = personExample;
+    }
 
-        public PeopleExample(PersonExample personExample)
-        {
-            _personExample = personExample;
-        }
-
-        public List<Person> GetExample()
-        {
-            return new List<Person>()
-            {
-                _personExample.GetExample(),
-                _personExample.GetExample(),
-                _personExample.GetExample()
-            };
-        }
+    public List<Person> GetExample()
+    {
+        return new List<Person> {
+            _personExample.GetExample(),
+            _personExample.GetExample(),
+            _personExample.GetExample()
+        };
     }
 }

@@ -1,10 +1,9 @@
 using System;
 using NSwag.Examples;
 
-namespace NSwagWithExamples.Models.Examples
+namespace NSwagWithExamples.Models.Examples;
+
+public class PersonBirthExample : IExampleProvider<DateTime>
 {
-    public class PersonBirthExample : IExampleProvider<DateTime>
-    {
-        public DateTime GetExample() => DateTime.UtcNow;
-    }
+    public DateTime GetExample() => DateTime.UtcNow;
 }

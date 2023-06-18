@@ -1,8 +1,7 @@
-﻿namespace NSwagWithExamples.Models
+﻿namespace NSwagWithExamples.Models;
+
+public class CustomInternalError
 {
-    public class CustomInternalError
-    {
-        public string Reason { get; set; }
-        public int Severity { get; set; }
-    }
+    public string Reason { get; set; }
+    public int Severity { get; set; }
 }
