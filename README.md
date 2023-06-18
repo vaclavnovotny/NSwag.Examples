@@ -195,8 +195,13 @@ To set specific example, simply annotate controllers method with `EndpointSpecif
 ```csharp
 [HttpGet("{id}/age")]
 [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(int))]
-[EndpointSpecificExample(typeof(PersonSpecificAgeExample))]
+[EndpointSpecificExample(typeof(PersonSpecificAgeExample))] // <-----
 public IActionResult GetPersonAge([FromRoute] int id) {...}
+
+public class PersonSpecificAgeExample : IExampleProvider<int>
+{
+    public int GetExample() => 69;
+}
 ```
 
 # Polymorphism
