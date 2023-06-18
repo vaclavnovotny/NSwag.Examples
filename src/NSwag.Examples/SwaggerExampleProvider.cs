@@ -1,25 +1,31 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
+using Microsoft.Extensions.DependencyInjection;
 
-namespace NSwag.Examples
+namespace NSwag.Examples;
+
+internal class SwaggerExampleProvider
 {
-    internal class SwaggerExampleProvider
-    {
-        private readonly SwaggerExampleTypeMapper _mapper;
-        private readonly IServiceProvider _serviceProvider;
+    private readonly SwaggerExampleTypeMapper _mapper;
+    private readonly IServiceProvider _serviceProvider;
 
-        internal SwaggerExampleProvider(SwaggerExampleTypeMapper mapper, IServiceProvider serviceProvider)
-        {
-            _mapper = mapper;
-            _serviceProvider = serviceProvider;
-        }
+    internal SwaggerExampleProvider(SwaggerExampleTypeMapper mapper, IServiceProvider serviceProvider) {
+        _mapper = mapper;
+        _serviceProvider = serviceProvider;
+    }
 
-        internal object GetProviderValue(Type valueType)
-        {
-            if (valueType == null || !_mapper.TryGetProviderType(valueType, out var providerType))
-                return null;
+    internal IEnumerable<KeyValuePair<string?, object>> GetProviderValues(Type? valueType) {
+        if (valueType == null)
+            yield break;
 
-            var providerService = _serviceProvider.GetService(providerType);
-            return providerService == null ? null : ((dynamic)providerService).GetExample();
+        var providerTypes = _mapper.GetProviderTypes(valueType);
+        foreach (var providerType in providerTypes) {
+            var providerServices = _serviceProvider.GetServices(providerType);
+            var exampleAnnotationAttribute = providerType.GetCustomAttribute<ExampleAnnotationAttribute>();
+            foreach (var example in providerServices.Select(x => ((dynamic)x).GetExample()))
+                yield return new KeyValuePair<string?, object>(exampleAnnotationAttribute?.Name, example);
         }
     }
 }

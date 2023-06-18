@@ -1,7 +1,6 @@
-﻿namespace NSwag.Examples
+﻿namespace NSwag.Examples;
+
+public interface IExampleProvider<out T>
 {
-    public interface IExampleProvider<out T>
-    {
-        T GetExample();
-    }
+    T GetExample();
 }

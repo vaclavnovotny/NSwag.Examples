@@ -1,19 +1,21 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <TargetFrameworks>netstandard2.0;net5.0;net6.0;net7.0</TargetFrameworks>
-    <Version>1.0.8</Version>
-    <Authors>Vaclav Novotny</Authors>
-    <RepositoryUrl>https://github.com/vaclavnovotny/NSwag.Examples</RepositoryUrl>
-    <PackageProjectUrl>https://github.com/vaclavnovotny/NSwag.Examples</PackageProjectUrl>
-    <PackageTabs>NSwag;Examples;Swagger;OpenAPI</PackageTabs>
-    <PackageId>NSwag.Examples</PackageId>
-    <PackageDescription>Define strongly-typed examples for your NSwag based API.</PackageDescription>
-    <PackageLicenseExpression>MIT</PackageLicenseExpression>
-    <IsPackable>true</IsPackable>
-  </PropertyGroup>
+    <PropertyGroup>
+        <TargetFrameworks>netstandard2.0;net5.0;net6.0;net7.0</TargetFrameworks>
+        <Version>1.0.8</Version>
+        <Authors>Vaclav Novotny</Authors>
+        <RepositoryUrl>https://github.com/vaclavnovotny/NSwag.Examples</RepositoryUrl>
+        <PackageProjectUrl>https://github.com/vaclavnovotny/NSwag.Examples</PackageProjectUrl>
+        <PackageTabs>NSwag;Examples;Swagger;OpenAPI</PackageTabs>
+        <PackageId>NSwag.Examples</PackageId>
+        <PackageDescription>Define strongly-typed examples for your NSwag based API.</PackageDescription>
+        <PackageLicenseExpression>MIT</PackageLicenseExpression>
+        <IsPackable>true</IsPackable>
+        <LangVersion>latest</LangVersion>
+        <Nullable>enable</Nullable>
+    </PropertyGroup>
 
-  <ItemGroup>
-    <PackageReference Include="NSwag.AspNetCore" Version="13.19.0" />
-  </ItemGroup>
+    <ItemGroup>
+        <PackageReference Include="NSwag.AspNetCore" Version="13.19.0"/>
+    </ItemGroup>
 </Project>
