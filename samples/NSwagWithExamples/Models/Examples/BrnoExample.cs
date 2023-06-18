@@ -1,9 +1,11 @@
 using System.Collections.Generic;
+using System.Linq;
 using NSwag.Examples;
 
 namespace NSwagWithExamples.Models.Examples;
 
-public class CityExample : IExampleProvider<City>
+[ExampleAnnotation(Name = "Brno")]
+public class BrnoExample : IExampleProvider<City>
 {
     public City GetExample()
     {

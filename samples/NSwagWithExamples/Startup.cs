@@ -22,7 +22,7 @@ public class Startup
         services.AddSingleton<IPersonNameGenerator, PersonNameGenerator>();
         services.AddControllers();
 
-        services.AddExampleProviders(typeof(CityExample).Assembly);
+        services.AddExampleProviders(typeof(BrnoExample).Assembly);
         services.AddOpenApiDocument(
             (settings, provider) =>
             {
