@@ -236,7 +236,10 @@ public class SlothExample : IExampleProvider<Animal>
     public Animal GetExample() => new Sloth { Age = 18, Name = "Vence", PawnCount = 4, YawnsCount = 158 };
 }
 ```
-Swagger then show all examples in case of enumerable in response body:
+Swagger then shows all examples in response body with dropdown:
+![Polymorphism single item response body](https://github.com/vaclavnovotny/images/blob/main/polymorphism3.jpg)
+
+Or in case of enumerable in response body:
 ![Polymorphism in response body](https://github.com/vaclavnovotny/images/blob/main/polymorphism.jpg)
 
 Or in case of request body, Swagger shows dropdown of all defined examples:
