@@ -1,17 +1,29 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace NSwag.Examples;
 
-[AttributeUsage(AttributeTargets.Method)]
+[AttributeUsage(AttributeTargets.Method, AllowMultiple = true)]
 public class EndpointSpecificExampleAttribute : Attribute
 {
-    public Type ExampleType { get; }
+    public IEnumerable<Type> ExampleTypes { get; }
 
-    public EndpointSpecificExampleAttribute(Type exampleType) {
+    public int ResponseStatusCode { get; set; }
+
+    public ExampleType ExampleType { get; set; } = ExampleType.Both;
+
+    public EndpointSpecificExampleAttribute(Type exampleType, params Type[] additionalExampleTypes)
+    {
         if (exampleType.GetInterfaces().All(i => i.IsGenericType && i.GetGenericTypeDefinition() != typeof(IExampleProvider<>)))
             throw new InvalidCastException($"Type {exampleType} does not implement {typeof(IExampleProvider<>)}.");
 
-        ExampleType = exampleType;
+        foreach (var additionalExampleType in additionalExampleTypes)
+        {
+            if (additionalExampleType.GetInterfaces().All(i => i.IsGenericType && i.GetGenericTypeDefinition() != typeof(IExampleProvider<>)))
+                throw new InvalidCastException($"Type {additionalExampleType} does not implement {typeof(IExampleProvider<>)}.");
+        }
+
+        ExampleTypes = additionalExampleTypes.Prepend(exampleType);
     }
 }

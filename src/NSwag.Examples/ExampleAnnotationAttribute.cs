@@ -6,4 +6,6 @@ namespace NSwag.Examples;
 public class ExampleAnnotationAttribute : Attribute
 {
     public string? Name { get; set; }
+
+    public ExampleType ExampleType { get; set; } = ExampleType.Both;
 }
