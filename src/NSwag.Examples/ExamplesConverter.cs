@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -18,9 +19,9 @@ internal class ExamplesConverter
         return JToken.Parse(serializeObject);
     }
 
-    internal IDictionary<string, OpenApiExample> ToOpenApiExamplesDictionary(IEnumerable<KeyValuePair<string, object>> examples) {
+    internal IDictionary<string, OpenApiExample> ToOpenApiExamplesDictionary(IEnumerable<KeyValuePair<string, Tuple<object, string?>>> examples) {
         return examples.ToDictionary(
             example => example.Key,
-            example => new OpenApiExample { Value = SerializeExampleJson(example.Value) });
+            example => new OpenApiExample { Value = SerializeExampleJson(example.Value.Item1), Description = example.Value.Item2 });
     }
 }

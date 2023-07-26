@@ -16,7 +16,7 @@ internal class SwaggerExampleProvider
         _serviceProvider = serviceProvider;
     }
 
-    internal IEnumerable<KeyValuePair<string?, object>> GetProviderValues(Type? valueType, IEnumerable<Type> exampleTypes, ExampleType exampleType) {
+    internal IEnumerable<KeyValuePair<string?, Tuple<object, string?>>> GetProviderValues(Type? valueType, IEnumerable<Type> exampleTypes, ExampleType exampleType) {
         if (valueType == null)
             yield break;
 
@@ -26,7 +26,7 @@ internal class SwaggerExampleProvider
             var exampleAnnotationAttribute = providerType.GetCustomAttribute<ExampleAnnotationAttribute>();
             foreach (var example in providerServices.Select(x => ((dynamic)x).GetExample())) {
                 if (exampleAnnotationAttribute == null || exampleAnnotationAttribute.ExampleType == exampleType || exampleAnnotationAttribute.ExampleType == ExampleType.Both) {
-                    yield return new KeyValuePair<string?, object>(exampleAnnotationAttribute?.Name, example);
+                    yield return new KeyValuePair<string?, Tuple<object, string?>>(exampleAnnotationAttribute?.Name, new (example, exampleAnnotationAttribute?.Description));
                 }
             }
         }

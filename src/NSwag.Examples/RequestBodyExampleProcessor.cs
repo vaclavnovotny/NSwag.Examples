@@ -89,7 +89,7 @@ public class RequestBodyExampleProcessor : IOperationProcessor
 
     private IDictionary<string, OpenApiExample> GetExamples(SwaggerExampleProvider exampleProvider, Type? valueType, IEnumerable<Type> exampleTypes, ExampleType exampleType) {
         var providerValues = exampleProvider.GetProviderValues(valueType, exampleTypes, exampleType);
-        var openApiExamples = _examplesConverter.ToOpenApiExamplesDictionary(providerValues.Select((x, i) => new KeyValuePair<string, object>(x.Key ?? $"Example {i + 1}", x.Value)));
+        var openApiExamples = _examplesConverter.ToOpenApiExamplesDictionary(providerValues.Select((x, i) => new KeyValuePair<string, Tuple<object, string?>>(x.Key ?? $"Example {i + 1}", x.Value)));
         return openApiExamples;
     }
 
