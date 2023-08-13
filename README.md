@@ -188,6 +188,16 @@ public class BrnoExample : IExampleProvider<City>
 Swagger then shows these names in dropdown:
 ![Named examples](https://github.com/vaclavnovotny/images/blob/main/namingexamples.jpg)
 
+# Restricting examples to request or response content
+Examples can be annotated to restrict their usage to either a request or a response body.  This is useful when the same type may be used on both requests and responses, and you want to restrict examples without specifying specific examples.
+```csharp
+[ExampleAnnotation(ExampleType = ExampleType.Request)]
+public class RequestExample : IExampleProvider<City> {...}
+
+[ExampleAnnotation(ExampleType = ExampleType.Response)]
+public class ResponseExample : IExampleProvider<City> {...}
+```
+
 # Set example for specific endpoint
 It is possible to set specific implementation of `IExampleProvider<T>` to desired API endpoint. This may be handy when multiple endpoints return same type or if primitive type is returned but you need to specify specific value.
 To set specific example, simply annotate controllers method with `EndpointSpecificExample` attribute and provide type of the example class.
@@ -201,6 +211,79 @@ public IActionResult GetPersonAge([FromRoute] int id) {...}
 public class PersonSpecificAgeExample : IExampleProvider<int>
 {
     public int GetExample() => 69;
+}
+```
+
+# Specify that an example is specifically for a request or response
+When setting a specific implementation of `IExampleProvider<T>` for a desired API endpoint, it may be desired to specify specifically whether this example applies to the request or response.
+
+```csharp
+[HttpPost("age")]
+[ProducesResponseType(StatusCodes.Status200OK, Type = typeof(int))]
+[EndpointSpecificExample(typeof(PersonSpecificAge69Example), ExampleType = ExampleType.Response)] // <----- Prevents example from being used in the request
+[EndpointSpecificExample(typeof(PersonSpecificAge50Example), ExampleType = ExampleType.Request)] // <----- Prevents example from being used in the response
+public IActionResult GetPersonAge([FromBody] int id) {...}
+
+// Included on response
+public class PersonSpecificAge69Example : IExampleProvider<int>
+{
+    public int GetExample() => 69;
+}
+
+// Included on request
+public class PersonSpecificAge50Example : IExampleProvider<int>
+{
+    public int GetExample() => 50;
+}
+```
+
+# Specify that an example is specifically for a specific response code
+When setting a specific implementation of `IExampleProvider<T>` for a desired API endpoint, it may be desired to specify specifically whether this example applies to the request or response.
+
+```csharp
+[HttpGet("{id}/age")]
+[ProducesResponseType(StatusCodes.Status200OK, Type = typeof(int))]
+[EndpointSpecificExample(typeof(PersonSpecificAgeExample), ExampleType = ExampleType.Response, ResponseStatusCode = StatusCodes.Status200OK)] // <----- Only shown for 200 responses
+[EndpointSpecificExample(typeof(BadRequestExample), ExampleType = ExampleType.Response, ResponseStatusCode = StatusCodes.Status400BadRequest)] // <----- Only shown for 400 responses
+public IActionResult GetPersonAge([FromRoute] int id) {...}
+
+public class PersonSpecificAgeExample : IExampleProvider<int>
+{
+    public int GetExample() => 69;
+}
+
+public class BadRequestExample : IExampleProvider<string>
+{
+    public int GetExample() => "Oops! Invalid id format error.";
+}
+```
+
+# Set multiple examples for specific endpoint
+It is possible to set multiple specific implementations of `IExampleProvider<T>` to desired API endpoint. This may be handy when multiple endpoints return same type or if primitive type is returned but you need to specify specific value.
+To set specific example, simply annotate controllers method with `EndpointSpecificExample` attribute and provide type of the example class.
+
+```csharp
+[HttpGet("{id}/age")]
+[ProducesResponseType(StatusCodes.Status200OK, Type = typeof(int))]
+[EndpointSpecificExample(typeof(PersonSpecificAge69Example), typeof(PersonSpecificAge50Example))] // <-----
+public IActionResult GetPersonAge([FromRoute] int id) {...}
+
+// Included
+public class PersonSpecificAge69Example : IExampleProvider<int>
+{
+    public int GetExample() => 69;
+}
+
+// Included
+public class PersonSpecificAge50Example : IExampleProvider<int>
+{
+    public int GetExample() => 50;
+}
+
+// Excluded
+public class PersonSpecificAge35Example : IExampleProvider<int>
+{
+    public int GetExample() => 35;
 }
 ```
 

@@ -25,3 +25,17 @@ public class PersonExample : IExampleProvider<Person>
         };
     }
 }
+
+[ExampleAnnotation(ExampleType = ExampleType.Request)]
+public class PersonRequestExample : IExampleProvider<Person>
+{
+    public Person GetExample()
+    {
+        return new Person
+        {
+            Id = 1,
+            FirstName = "Fixed First Name",
+            LastName = "Fixed Last Name",
+        };
+    }
+}

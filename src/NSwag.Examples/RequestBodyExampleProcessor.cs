@@ -37,8 +37,10 @@ public class RequestBodyExampleProcessor : IOperationProcessor
             if (!context.OperationDescription.Operation.RequestBody.Content.TryGetValue(MediaTypeName, out var mediaType))
                 continue;
 
-            var endpointSpecificExampleAttribute = context.MethodInfo.GetCustomAttribute<EndpointSpecificExampleAttribute?>();
-            SetExamples(GetExamples(exampleProvider, parameter.Key.ParameterType, endpointSpecificExampleAttribute?.ExampleType), mediaType);
+            var endpointSpecificExampleAttributes = context.MethodInfo.GetCustomAttributes<EndpointSpecificExampleAttribute>();
+            SetExamples(GetExamples(exampleProvider, parameter.Key.ParameterType, endpointSpecificExampleAttributes
+                .Where(x => x.ExampleType == ExampleType.Request || x.ExampleType == ExampleType.Both)
+                .SelectMany(x => x.ExampleTypes), ExampleType.Request), mediaType);
         }
     }
 
@@ -61,9 +63,12 @@ public class RequestBodyExampleProcessor : IOperationProcessor
             else if (attributesWithSameKey.Count == 0)
                 continue;
 
-            var endpointSpecificExampleAttribute = context.MethodInfo.GetCustomAttribute<EndpointSpecificExampleAttribute?>();
+            var endpointSpecificExampleAttributes = context.MethodInfo.GetCustomAttributes<EndpointSpecificExampleAttribute>();
             var valueType = attributesWithSameKey.FirstOrDefault()?.Type;
-            SetExamples(GetExamples(exampleProvider, valueType, endpointSpecificExampleAttribute?.ExampleType), mediaType);
+            SetExamples(GetExamples(exampleProvider, valueType, endpointSpecificExampleAttributes
+                .Where(x => x.ExampleType == ExampleType.Response || x.ExampleType == ExampleType.Both)
+                .Where(x => x.ResponseStatusCode != 0 || x.ResponseStatusCode == responseStatusCode)
+                .SelectMany(x => x.ExampleTypes), ExampleType.Response), mediaType);
         }
     }
 
@@ -82,9 +87,9 @@ public class RequestBodyExampleProcessor : IOperationProcessor
         }
     }
 
-    private IDictionary<string, OpenApiExample> GetExamples(SwaggerExampleProvider exampleProvider, Type? valueType, Type? exampleType) {
-        var providerValues = exampleProvider.GetProviderValues(valueType, exampleType);
-        var openApiExamples = _examplesConverter.ToOpenApiExamplesDictionary(providerValues.Select((x, i) => new KeyValuePair<string, object>(x.Key ?? $"Example {i + 1}", x.Value)));
+    private IDictionary<string, OpenApiExample> GetExamples(SwaggerExampleProvider exampleProvider, Type? valueType, IEnumerable<Type> exampleTypes, ExampleType exampleType) {
+        var providerValues = exampleProvider.GetProviderValues(valueType, exampleTypes, exampleType);
+        var openApiExamples = _examplesConverter.ToOpenApiExamplesDictionary(providerValues.Select((x, i) => new KeyValuePair<string, Tuple<object, string?>>(x.Key ?? $"Example {i + 1}", x.Value)));
         return openApiExamples;
     }
 
