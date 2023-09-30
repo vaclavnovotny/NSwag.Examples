@@ -67,7 +67,7 @@ public class RequestBodyExampleProcessor : IOperationProcessor
             var valueType = attributesWithSameKey.FirstOrDefault()?.Type;
             SetExamples(GetExamples(exampleProvider, valueType, endpointSpecificExampleAttributes
                 .Where(x => x.ExampleType == ExampleType.Response || x.ExampleType == ExampleType.Both)
-                .Where(x => x.ResponseStatusCode != 0 || x.ResponseStatusCode == responseStatusCode)
+                .Where(x => x.ResponseStatusCode != 0 && x.ResponseStatusCode == responseStatusCode)
                 .SelectMany(x => x.ExampleTypes), ExampleType.Response), mediaType);
         }
     }
