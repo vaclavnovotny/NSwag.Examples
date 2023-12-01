@@ -2,9 +2,9 @@ name: Build Samples
 
 on:
   push:
-    branches: [ main ]
+    branches: [ main, prerelease ]
   pull_request:
-    branches: [ main ]
+    branches: [ main, prerelease ]
     
 defaults:
   run:
