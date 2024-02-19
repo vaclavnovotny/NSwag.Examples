@@ -5,6 +5,7 @@ using System.Reflection;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using NSwag.Generation.AspNetCore;
 using NSwag.Generation.Processors;
 using NSwag.Generation.Processors.Contexts;
 
@@ -23,7 +24,7 @@ public class RequestBodyExampleProcessor : IOperationProcessor
     }
 
     public bool Process(OperationProcessorContext context) {
-        _examplesConverter = new ExamplesConverter(context.Settings.SerializerSettings);
+        _examplesConverter = new ExamplesConverter(AspNetCoreOpenApiDocumentGenerator.GetJsonSerializerSettings(_serviceProvider), AspNetCoreOpenApiDocumentGenerator.GetSystemTextJsonSettings(_serviceProvider));
         var exampleProvider = _serviceProvider.GetRequiredService<SwaggerExampleProvider>();
         SetRequestExamples(context, exampleProvider);
         SetResponseExamples(context, exampleProvider);

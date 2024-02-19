@@ -1,8 +1,8 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <TargetFrameworks>netstandard2.0;net5.0;net6.0;net7.0</TargetFrameworks>
-        <Version>1.0.11</Version>
+        <TargetFrameworks>netstandard2.0;net5.0;net6.0;net7.0;net8.0</TargetFrameworks>
+        <Version>1.0.12-preview-01</Version>
         <Authors>Vaclav Novotny</Authors>
         <RepositoryUrl>https://github.com/vaclavnovotny/NSwag.Examples</RepositoryUrl>
         <PackageProjectUrl>https://github.com/vaclavnovotny/NSwag.Examples</PackageProjectUrl>
@@ -16,6 +16,6 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="NSwag.AspNetCore" Version="13.19.0" />
+        <PackageReference Include="NSwag.AspNetCore" Version="14.0.3" />
     </ItemGroup>
 </Project>

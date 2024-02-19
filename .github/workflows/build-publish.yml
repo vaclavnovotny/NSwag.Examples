@@ -2,7 +2,7 @@ name: Build and Publish
 
 on:
   push:
-    branches: [ main, prelease ]
+    branches: [ main, prerelease ]
     
 defaults:
   run:

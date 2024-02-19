@@ -1,21 +1,25 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.Json;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using JsonSerializer = System.Text.Json.JsonSerializer;
 
 namespace NSwag.Examples;
 
 internal class ExamplesConverter
 {
-    private readonly JsonSerializerSettings _jsonSerializerSettings;
+    private readonly JsonSerializerSettings? _jsonSerializerSettings;
+    private readonly JsonSerializerOptions? _systemTextJsonSettings;
 
-    internal ExamplesConverter(JsonSerializerSettings jsonSerializerSettings) {
+    internal ExamplesConverter(JsonSerializerSettings? jsonSerializerSettings, JsonSerializerOptions? systemTextJsonSettings) {
         _jsonSerializerSettings = jsonSerializerSettings;
+        _systemTextJsonSettings = systemTextJsonSettings;
     }
 
     private object SerializeExampleJson(object value) {
-        var serializeObject = JsonConvert.SerializeObject(value, _jsonSerializerSettings);
+        var serializeObject = _jsonSerializerSettings is not null ? JsonConvert.SerializeObject(value, _jsonSerializerSettings) : JsonSerializer.Serialize(value, _systemTextJsonSettings);
         return JToken.Parse(serializeObject);
     }
 
