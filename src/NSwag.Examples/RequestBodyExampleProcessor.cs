@@ -21,10 +21,10 @@ public class RequestBodyExampleProcessor : IOperationProcessor
     public RequestBodyExampleProcessor(IServiceProvider serviceProvider) {
         _serviceProvider = serviceProvider;
         _logger = _serviceProvider.GetRequiredService<ILogger<RequestBodyExampleProcessor>>();
+        _examplesConverter = new ExamplesConverter(AspNetCoreOpenApiDocumentGenerator.GetJsonSerializerSettings(_serviceProvider), AspNetCoreOpenApiDocumentGenerator.GetSystemTextJsonSettings(_serviceProvider));
     }
 
     public bool Process(OperationProcessorContext context) {
-        _examplesConverter = new ExamplesConverter(AspNetCoreOpenApiDocumentGenerator.GetJsonSerializerSettings(_serviceProvider), AspNetCoreOpenApiDocumentGenerator.GetSystemTextJsonSettings(_serviceProvider));
         var exampleProvider = _serviceProvider.GetRequiredService<SwaggerExampleProvider>();
         SetRequestExamples(context, exampleProvider);
         SetResponseExamples(context, exampleProvider);
