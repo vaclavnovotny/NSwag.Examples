@@ -12,8 +12,8 @@ public class CitiesExample : IExampleProvider<List<City>>
                 Id = 5,
                 Name = "Brno",
                 People = new List<Person> {
-                    new Person {Id = 1, FirstName = "Henry", LastName = "Cavill"},
-                    new Person {Id = 2, FirstName = "John", LastName = "Doe"}
+                    new Person (1, "Henry", "Cavill"),
+                    new Person (2, "John", "Doe")
                 }
             }
         };

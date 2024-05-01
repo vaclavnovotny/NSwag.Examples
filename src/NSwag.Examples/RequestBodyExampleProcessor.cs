@@ -39,9 +39,16 @@ public class RequestBodyExampleProcessor : IOperationProcessor
                 continue;
 
             var endpointSpecificExampleAttributes = context.MethodInfo.GetCustomAttributes<EndpointSpecificExampleAttribute>();
-            SetExamples(GetExamples(exampleProvider, parameter.Key.ParameterType, endpointSpecificExampleAttributes
-                .Where(x => x.ExampleType == ExampleType.Request || x.ExampleType == ExampleType.Both)
-                .SelectMany(x => x.ExampleTypes), ExampleType.Request), mediaType);
+            SetExamples(
+                GetExamples(
+                    exampleProvider, 
+                    parameter.Key.ParameterType, 
+                    endpointSpecificExampleAttributes
+                        .Where(x => x.ExampleType == ExampleType.Request || x.ExampleType == ExampleType.Both)
+                        .SelectMany(x => x.ExampleTypes), ExampleType.Request
+                    ), 
+                mediaType
+                );
         }
     }
 

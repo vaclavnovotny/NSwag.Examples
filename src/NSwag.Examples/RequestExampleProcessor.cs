@@ -31,15 +31,27 @@ public class RequestExampleProcessor : IOperationProcessor
     }
 
     private void SetRequestExamples(OperationProcessorContext context, SwaggerExampleProvider exampleProvider) {
-        foreach (var apiParameter in context.OperationDescription.Operation.Parameters.Where(x => x.Kind != OpenApiParameterKind.Body)) {
+        var endpointSpecificExampleAttributes = context.MethodInfo.GetCustomAttributes<EndpointSpecificExampleAttribute>();
+        foreach (var apiParameter in context.OperationDescription.Operation.Parameters.Where(x => x.Kind != OpenApiParameterKind.Body))
+        {
+            var exampleTypes = endpointSpecificExampleAttributes
+                .Where(x =>
+                        (x.ExampleType == ExampleType.Request || x.ExampleType == ExampleType.Both)
+                        &&
+                        (x.ParameterName == null || x.ParameterName == apiParameter.Name)
+                    ).SelectMany(x => x.ExampleTypes);
+
+            if (!exampleTypes.Any())
+                continue;
+
             KeyValuePair<ParameterInfo, OpenApiParameter>? parameter = context.Parameters.SingleOrDefault(x => x.Value.Name == apiParameter.Name);
             if (parameter == null)
                 continue;
 
-            var endpointSpecificExampleAttributes = context.MethodInfo.GetCustomAttributes<EndpointSpecificExampleAttribute>();
-            SetExamples(parameter.Value, GetExamples(exampleProvider, parameter.Value.Key.ParameterType, endpointSpecificExampleAttributes
-                .Where(x => x.ExampleType == ExampleType.Request || x.ExampleType == ExampleType.Both)
-                .SelectMany(x => x.ExampleTypes), ExampleType.Request));
+            SetExamples(
+                parameter.Value, 
+                GetExamples(exampleProvider, parameter.Value.Key.ParameterType, exampleTypes, ExampleType.Request)
+            );
         }
     }
 
@@ -56,7 +68,7 @@ public class RequestExampleProcessor : IOperationProcessor
                     break;
                 }
             case { Count: 1 }:
-                par.Value.Example = openApiExamples.Single().Value.Value;
+                par.Value.Example = openApiExamples.First().Value.Value;
                 break;
         }
     }
