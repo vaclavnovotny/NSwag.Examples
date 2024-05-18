@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc.ModelBinding;
 using NSwag.Examples;
 using NSwagWithExamples.Models;
 using NSwagWithExamples.Models.Examples;
+using NSwagWithExamples.Models.Examples.Persons.Requests;
 
 namespace NSwagWithExamples.Controllers;
 
@@ -16,15 +17,15 @@ namespace NSwagWithExamples.Controllers;
 [ProducesResponseType(StatusCodes.Status500InternalServerError, Type = typeof(CustomInternalError))]
 public class PeopleController : ControllerBase
 {
-    static ConcurrentDictionary<int, Person> _people = new ConcurrentDictionary<int, Person>();
-    static object _lock = new object();
+    private static readonly ConcurrentDictionary<int, Person> People = new ConcurrentDictionary<int, Person>();
+    private static readonly object Lock = new object();
 
-    static void NewPerson(Person person)
+    private static void NewPerson(Person person)
     {
-        lock (_lock)
+        lock (Lock)
         {
-            person.Id = _people.Keys.Any() ? _people.Keys.Max() + 1 : 1;
-            _people.TryAdd(person.Id, person);
+            person.Id = People.Keys.Any() ? People.Keys.Max() + 1 : 1;
+            People.TryAdd(person.Id, person);
         }
     }
 
@@ -45,32 +46,32 @@ public class PeopleController : ControllerBase
 
     [HttpGet]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<Person>))]
-    [EndpointSpecificExample(typeof(PersonAgeNoneExample), typeof(PersonAge18Example), typeof(PersonAge69Example), ParameterName = "minAge", ExampleType = ExampleType.Request)]
-    [EndpointSpecificExample(typeof(PersonTextExample0), typeof(PersonTextExample1), typeof(PersonTextExample2), typeof(PersonTextExample3), ParameterName = "searchText", ExampleType = ExampleType.Request)]
+    [EndpointSpecificExample(typeof(PersonAge18Example), typeof(PersonAge69Example), ParameterName = "minAge", ExampleType = ExampleType.Request)]
+    [EndpointSpecificExample(typeof(PersonTextExample1), typeof(PersonTextExample2), typeof(PersonTextExample3), ParameterName = "searchText", ExampleType = ExampleType.Request)]
     public IActionResult GetPeople([FromQuery] int? minAge = null, [FromQuery] string searchText = null)
     {
         if (minAge == null && string.IsNullOrEmpty(searchText))
-            return Ok(_people);
+            return Ok(People);
 
         if (minAge == null)
-            return Ok(_people.Values.Where(p => $"{p.FirstName}~{p.LastName}".Contains(searchText, StringComparison.CurrentCultureIgnoreCase)));
+            return Ok(People.Values.Where(p => $"{p.FirstName}~{p.LastName}".Contains(searchText, StringComparison.CurrentCultureIgnoreCase)));
 
         if (string.IsNullOrEmpty(searchText))
-            return Ok(_people.Values.Where(p => p.Age >= minAge));
+            return Ok(People.Values.Where(p => p.Age >= minAge));
 
-        return Ok(_people.Values.Where(p => p.Age >= minAge && $"{p.FirstName}~{p.LastName}".Contains(searchText, StringComparison.CurrentCultureIgnoreCase)));
+        return Ok(People.Values.Where(p => p.Age >= minAge && $"{p.FirstName}~{p.LastName}".Contains(searchText, StringComparison.CurrentCultureIgnoreCase)));
     }
 
     [HttpGet("count")]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(int))]
-    public IActionResult GetNumberOfPeople() => Ok(_people.Count);
+    public IActionResult GetNumberOfPeople() => Ok(People.Count);
 
     [HttpGet("{id}")]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Person))]
     [ProducesResponseType(StatusCodes.Status500InternalServerError, Type = typeof(CustomInternalErrorOnMethodLevel))]
     public IActionResult GetPerson([FromRoute] int id)
     {
-        if (_people.TryGetValue(id, out Person person))
+        if (People.TryGetValue(id, out Person person))
             return Ok(person);
 
         return NotFound();
@@ -81,7 +82,7 @@ public class PeopleController : ControllerBase
     [ProducesResponseType(StatusCodes.Status500InternalServerError, Type = typeof(CustomInternalErrorOnMethodLevel))]
     public IActionResult GetPersonAge([FromRoute] int id)
     {
-        if (_people.TryGetValue(id, out Person person))
+        if (People.TryGetValue(id, out Person person))
             return Ok(person.Age);
 
         return NotFound();
@@ -92,7 +93,7 @@ public class PeopleController : ControllerBase
     [ProducesResponseType(StatusCodes.Status500InternalServerError, Type = typeof(CustomInternalErrorOnMethodLevel))]
     public IActionResult GetPersonBirth([FromRoute] int id)
     {
-        if (_people.TryGetValue(id, out Person person))
+        if (People.TryGetValue(id, out Person person))
             return Ok(person.BirthDay);
 
         return NotFound();

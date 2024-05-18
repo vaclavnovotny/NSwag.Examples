@@ -13,13 +13,11 @@ namespace NSwag.Examples;
 
 public class RequestExampleProcessor : IOperationProcessor
 {
-    private readonly ILogger<RequestBodyExampleProcessor>? _logger;
     private readonly IServiceProvider _serviceProvider;
-    private ExamplesConverter _examplesConverter;
+    private readonly ExamplesConverter _examplesConverter;
 
     public RequestExampleProcessor(IServiceProvider serviceProvider) {
         _serviceProvider = serviceProvider;
-        _logger = _serviceProvider.GetRequiredService<ILogger<RequestBodyExampleProcessor>>();
         _examplesConverter = new ExamplesConverter(AspNetCoreOpenApiDocumentGenerator.GetJsonSerializerSettings(_serviceProvider), AspNetCoreOpenApiDocumentGenerator.GetSystemTextJsonSettings(_serviceProvider));
     }
 
@@ -31,15 +29,16 @@ public class RequestExampleProcessor : IOperationProcessor
     }
 
     private void SetRequestExamples(OperationProcessorContext context, SwaggerExampleProvider exampleProvider) {
-        var endpointSpecificExampleAttributes = context.MethodInfo.GetCustomAttributes<EndpointSpecificExampleAttribute>();
-        foreach (var apiParameter in context.OperationDescription.Operation.Parameters.Where(x => x.Kind != OpenApiParameterKind.Body))
-        {
+        var endpointSpecificExampleAttributes = context.MethodInfo.GetCustomAttributes<EndpointSpecificExampleAttribute>().ToList();
+        foreach (var apiParameter in context.OperationDescription.Operation.Parameters.Where(x => x.Kind != OpenApiParameterKind.Body)) {
             var exampleTypes = endpointSpecificExampleAttributes
-                .Where(x =>
+                .Where(
+                    x =>
                         (x.ExampleType == ExampleType.Request || x.ExampleType == ExampleType.Both)
                         &&
-                        (x.ParameterName == null || x.ParameterName == apiParameter.Name)
-                    ).SelectMany(x => x.ExampleTypes);
+                        (x.ParameterName == null || x.ParameterName == apiParameter.Name))
+                .SelectMany(x => x.ExampleTypes)
+                .ToList();
 
             if (!exampleTypes.Any())
                 continue;
@@ -62,6 +61,7 @@ public class RequestExampleProcessor : IOperationProcessor
             case { Count: > 1 }:
                 {
                     par.Value.Examples = new Dictionary<string, OpenApiExample>();
+                    par.Value.Examples.Add(new KeyValuePair<string, OpenApiExample>("-", new OpenApiExample { Value = null }));
                     foreach (var openApiExample in openApiExamples)
                         par.Value.Examples.Add(openApiExample.Key, openApiExample.Value);
 

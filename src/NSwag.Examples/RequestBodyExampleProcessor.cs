@@ -14,9 +14,9 @@ namespace NSwag.Examples;
 public class RequestBodyExampleProcessor : IOperationProcessor
 {
     private const string MediaTypeName = "application/json";
-    private readonly ILogger<RequestBodyExampleProcessor>? _logger;
+    private readonly ILogger<RequestBodyExampleProcessor> _logger;
     private readonly IServiceProvider _serviceProvider;
-    private ExamplesConverter _examplesConverter;
+    private readonly ExamplesConverter _examplesConverter;
 
     public RequestBodyExampleProcessor(IServiceProvider serviceProvider) {
         _serviceProvider = serviceProvider;

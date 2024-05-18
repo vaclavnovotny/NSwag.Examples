@@ -4,7 +4,7 @@ namespace NSwagWithExamples.Models;
 
 public class Person
 {
-    static Random _random = new Random(DateTime.Now.Microsecond);
+    private static readonly Random Random = new Random(DateTime.Now.Microsecond);
 
     public string FirstName { get; set; }
     public int Id { get; internal set; }
@@ -19,14 +19,14 @@ public class Person
         Id = id;
         FirstName = firstName;
         LastName = lastName;
-        BirthDay = birthDay ?? new DateTime(_random.Next(1920, DateTime.Now.Year), _random.Next(1, 13), _random.Next(1, 29));
+        BirthDay = birthDay ?? new DateTime(Random.Next(1920, DateTime.Now.Year), Random.Next(1, 13), Random.Next(1, 29));
     }
 
     public Person(string firstName, string lastName, DateTime? birthDay = null)
     {
         FirstName = firstName;
         LastName = lastName;
-        BirthDay = birthDay ?? new DateTime(_random.Next(1920, DateTime.Now.Year), _random.Next(1, 13), _random.Next(1, 29));
+        BirthDay = birthDay ?? new DateTime(Random.Next(1920, DateTime.Now.Year), Random.Next(1, 13), Random.Next(1, 29));
     }
 
     public int Age
