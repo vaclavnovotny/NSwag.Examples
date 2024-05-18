@@ -14,17 +14,17 @@ namespace NSwag.Examples;
 public class RequestBodyExampleProcessor : IOperationProcessor
 {
     private const string MediaTypeName = "application/json";
-    private readonly ILogger<RequestBodyExampleProcessor>? _logger;
+    private readonly ILogger<RequestBodyExampleProcessor> _logger;
     private readonly IServiceProvider _serviceProvider;
-    private ExamplesConverter _examplesConverter;
+    private readonly ExamplesConverter _examplesConverter;
 
     public RequestBodyExampleProcessor(IServiceProvider serviceProvider) {
         _serviceProvider = serviceProvider;
         _logger = _serviceProvider.GetRequiredService<ILogger<RequestBodyExampleProcessor>>();
+        _examplesConverter = new ExamplesConverter(AspNetCoreOpenApiDocumentGenerator.GetJsonSerializerSettings(_serviceProvider), AspNetCoreOpenApiDocumentGenerator.GetSystemTextJsonSettings(_serviceProvider));
     }
 
     public bool Process(OperationProcessorContext context) {
-        _examplesConverter = new ExamplesConverter(AspNetCoreOpenApiDocumentGenerator.GetJsonSerializerSettings(_serviceProvider), AspNetCoreOpenApiDocumentGenerator.GetSystemTextJsonSettings(_serviceProvider));
         var exampleProvider = _serviceProvider.GetRequiredService<SwaggerExampleProvider>();
         SetRequestExamples(context, exampleProvider);
         SetResponseExamples(context, exampleProvider);
@@ -39,9 +39,16 @@ public class RequestBodyExampleProcessor : IOperationProcessor
                 continue;
 
             var endpointSpecificExampleAttributes = context.MethodInfo.GetCustomAttributes<EndpointSpecificExampleAttribute>();
-            SetExamples(GetExamples(exampleProvider, parameter.Key.ParameterType, endpointSpecificExampleAttributes
-                .Where(x => x.ExampleType == ExampleType.Request || x.ExampleType == ExampleType.Both)
-                .SelectMany(x => x.ExampleTypes), ExampleType.Request), mediaType);
+            SetExamples(
+                GetExamples(
+                    exampleProvider, 
+                    parameter.Key.ParameterType, 
+                    endpointSpecificExampleAttributes
+                        .Where(x => x.ExampleType == ExampleType.Request || x.ExampleType == ExampleType.Both)
+                        .SelectMany(x => x.ExampleTypes), ExampleType.Request
+                    ), 
+                mediaType
+                );
         }
     }
 

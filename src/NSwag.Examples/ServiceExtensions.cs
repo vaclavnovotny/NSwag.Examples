@@ -10,6 +10,7 @@ public static class ServiceExtensions
 {
     public static void AddExamples(this AspNetCoreOpenApiDocumentGeneratorSettings settings, IServiceProvider serviceProvider) {
         settings.OperationProcessors.Add(new RequestBodyExampleProcessor(serviceProvider));
+        settings.OperationProcessors.Add(new RequestExampleProcessor(serviceProvider));
     }
 
     public static void AddExampleProviders(this IServiceCollection collection, params Assembly[] assemblies) {
