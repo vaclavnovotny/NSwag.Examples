@@ -13,6 +13,11 @@ public class EndpointSpecificExampleAttribute : Attribute
 
     public ExampleType ExampleType { get; set; } = ExampleType.Both;
 
+    /// <summary>
+    /// A parameter name is required for a parameter kind other than body.<br />
+    /// </summary>
+    public string? ParameterName { get; set; }
+
     public EndpointSpecificExampleAttribute(Type exampleType, params Type[] additionalExampleTypes)
     {
         if (exampleType.GetInterfaces().All(i => i.IsGenericType && i.GetGenericTypeDefinition() != typeof(IExampleProvider<>)))

@@ -1,5 +1,5 @@
 ![Build and Publish](https://github.com/vaclavnovotny/NSwag.Examples/workflows/Build%20and%20Publish/badge.svg) ![Nuget](https://img.shields.io/nuget/v/NSwag.Examples?color=blue)
-# Response and Request Body Examples for NSwag<!-- omit from toc -->
+# Response and Request Examples for NSwag<!-- omit from toc -->
 This library allows you to programmatically define swagger examples in your NSWag application. Example discovery occurs at start of application and uses reflection. 
 
 ### Overview:<!-- omit from toc -->
@@ -7,6 +7,7 @@ This library allows you to programmatically define swagger examples in your NSWa
   - [Install package](#install-package)
   - [Setup Startup.cs](#setup-startupcs)
 - [Define examples for your types](#define-examples-for-your-types)
+  - [Request Parameters](#request-parameters)
   - [Request Body Parameters](#request-body-parameters)
   - [Response Body](#response-body)
 - [Use dependency injection](#use-dependency-injection)
@@ -60,6 +61,26 @@ public class CityExample : IExampleProvider<City>
             }
         };
     }
+}
+
+```
+## Request Parameters
+For request other than body parameters like query, route or header parameters, simply define the example using `ExampleAnnotation` atribute and set `ExampleType` to `Request` or `Both`. 
+```csharp
+[ExampleAnnotation(Name = "Search text 'inspektor'", ExampleType = ExampleType.Request)]
+public class PersonTextExample1 : IExampleProvider<string>
+{
+    public string GetExample() => "inspektor";
+}
+```
+After that, you also need decorate endpoint which examples you wish to be showed
+
+```csharp
+[HttpGet]
+[EndpointSpecificExample(typeof(PersonTextExample1), ParameterName = "searchText", ExampleType = ExampleType.Request)]
+public IActionResult GetPeople([FromQuery] int? minAge = null, [FromQuery] string searchText = null)
+{
+    ...
 }
 ```
 

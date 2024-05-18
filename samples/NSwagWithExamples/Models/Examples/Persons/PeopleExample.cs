@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using NSwag.Examples;
 
-namespace NSwagWithExamples.Models.Examples;
+namespace NSwagWithExamples.Models.Examples.Persons;
 
 public class PeopleExample : IExampleProvider<List<Person>>
 {
