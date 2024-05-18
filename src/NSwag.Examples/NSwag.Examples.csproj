@@ -2,7 +2,7 @@
 
     <PropertyGroup>
         <TargetFrameworks>netstandard2.0;net5.0;net6.0;net7.0;net8.0</TargetFrameworks>
-        <Version>1.0.14-preview-01</Version>
+        <Version>1.0.14</Version>
         <Authors>Vaclav Novotny</Authors>
         <RepositoryUrl>https://github.com/vaclavnovotny/NSwag.Examples</RepositoryUrl>
         <PackageProjectUrl>https://github.com/vaclavnovotny/NSwag.Examples</PackageProjectUrl>
